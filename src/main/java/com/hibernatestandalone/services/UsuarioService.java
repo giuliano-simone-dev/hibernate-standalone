@@ -30,14 +30,15 @@ public class UsuarioService extends AbstractService {
         }
     }
     
-	public Usuario findById(long id) {
+    public Usuario findById(long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Usuario.class, id);
+            return session.find(Usuario.class, id);
         }
     }
 
     public List<Usuario> getAll() {
         try (Session session = this.getSession()) {
+            Transaction transaction = session.beginTransaction();
             String hql = "FROM Usuario";
             return session.createQuery(hql, Usuario.class).getResultList();
         }
@@ -46,13 +47,13 @@ public class UsuarioService extends AbstractService {
     public void delete(long id) {
     	Transaction transaction = null;
         try (Session session = this.getSession()) {
-        	transaction = session.beginTransaction();
-    		Usuario user = (Usuario) session.getReference(Usuario.class, id);
+            transaction = session.beginTransaction();
+            Usuario user = (Usuario) session.getReference(Usuario.class, id);
             session.remove(user);
             transaction.commit();
         }catch(Exception e) {
-        	if (transaction != null) transaction.rollback();
-        	throw e;
+            if (transaction != null) transaction.rollback();
+            throw e;
         }
     }
 

@@ -33,7 +33,7 @@
 		<dependency>
 	        <groupId>org.hibernate.orm</groupId>
 	        <artifactId>hibernate-core</artifactId>
-	    	<version>6.4.0.Final</version>
+	    	<version>7.0.2.Final</version>
 		</dependency>
 	       <!-- MS SQL Server Connector -->
 	    <dependency>
