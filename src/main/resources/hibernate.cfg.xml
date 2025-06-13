@@ -13,9 +13,12 @@
 	<property name="hibernate.use_sql_comments">false</property>
 	<property name="hibernate.current_session_context_class">thread</property>
         <property name="hibernate.connection.autocommit">true</property>
-
+        <property name="hibernate.current_session_context_class">thread</property>
+        <property name="enable_lazy_load_no_trans">true</property>
         <!-- Entidades a usar (No olvidar de actualizar) -->
         <mapping class="com.hibernatestandalone.entity.Usuario"/>
+        <mapping class="com.hibernatestandalone.entity.Nota"/>
+
 
     </session-factory>
     

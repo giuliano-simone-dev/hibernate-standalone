@@ -1,5 +1,6 @@
 package com.hibernatestandalone.services;
 
+import com.hibernatestandalone.entity.Nota;
 import com.hibernatestandalone.entity.Usuario;
 import com.hibernatestandalone.util.HibernateUtil;
 import org.hibernate.Session;
@@ -8,60 +9,58 @@ import org.hibernate.Transaction;
 import java.util.Date;
 import java.util.List;
 
-public class UsuarioService extends AbstractService {
+public class NotaService extends AbstractService {
 
-    public Usuario create(String nombre, String apellido, String email, String password) {
+    public Nota create(String texto, Usuario usuario) {
         Session session = this.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Usuario user = new Usuario();
-            user.setNombre(nombre);
-            user.setApellido(apellido);
-            user.setMail(email);
-            user.setPassword(password);
-            user.setFRegistro(new Date());
-            session.persist(user);
+            Nota nota = new Nota();
+            nota.setTexto(texto);
+            nota.setUsuario(usuario);
+            nota.setF_creacion(new Date());
+            session.persist(nota);
+            session.flush();
             transaction.commit();
-            return user;
+            return nota;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             throw e;
         }
     }
 
-    public Usuario create(Usuario user) {
+    public Nota create(Nota nota) {
         Session session = this.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            user.setFRegistro(new Date());
-            session.persist(user);
+            nota.setF_creacion(new Date());
+            session.persist(nota);
+            session.flush();
             transaction.commit();
-            return user;
+            return nota;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             throw e;
         }
     }
 
-    public Usuario refresh(Usuario user) {
+    public Nota refresh(Nota nota) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        session.refresh(user);
-        return user;
-    }
-    
-    public Usuario findById(long id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        return session.find(Usuario.class, id);
+        session.refresh(nota);
+        return nota;
     }
 
-    public List<Usuario> getAll() {
+    public Nota findById(long id) {
         Session session = this.getSession();
-        Transaction transaction = session.beginTransaction();
-        String hql = "FROM Usuario";
-        List<Usuario> list = session.createQuery(hql, Usuario.class).getResultList();
-        return list;
+        return session.find(Nota.class, id);
+    }
+
+    public List<Nota> getAll() {
+        Session session = this.getSession();
+        String hql = "FROM Nota";
+        return session.createQuery(hql, Nota.class).getResultList();
     }
 
     public void delete(long id) {
@@ -69,8 +68,8 @@ public class UsuarioService extends AbstractService {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Usuario user = session.getReference(Usuario.class, id);
-            session.remove(user);
+            Nota nota = session.getReference(Nota.class, id);
+            session.remove(nota);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
@@ -78,12 +77,12 @@ public class UsuarioService extends AbstractService {
         }
     }
 
-    public void delete(Usuario user) {
+    public void delete(Nota nota) {
         Session session = this.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            session.remove(user);
+            session.remove(nota);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
@@ -91,16 +90,13 @@ public class UsuarioService extends AbstractService {
         }
     }
 
-    public void update(Usuario user, String nombre, String apellido, String email, String password) {
+    public void update(Nota nota, String texto) {
         Session session = this.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            if (nombre != null)   user.setNombre(nombre);
-            if (apellido != null) user.setApellido(apellido);
-            if (email != null)    user.setMail(email);
-            if (password != null) user.setPassword(password);
-            session.merge(user);
+            nota.setTexto(texto);
+            session.merge(nota);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
@@ -108,18 +104,15 @@ public class UsuarioService extends AbstractService {
         }
     }
 
-    public void update(int id, String nombre, String apellido, String email, String password) {
+    public void update(int id, String texto) {
         Session session = this.getSession();
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            Usuario user = session.getReference(Usuario.class, id);
-            if (user != null) {
-                if (nombre != null)   user.setNombre(nombre);
-                if (apellido != null) user.setApellido(apellido);
-                if (email != null)    user.setMail(email);
-                if (password != null) user.setPassword(password);
-                session.merge(user);
+            Nota nota = session.getReference(Nota.class, id);
+            if (nota != null) {
+                nota.setTexto(texto);
+                session.merge(nota);
             }
             transaction.commit();
         } catch (Exception e) {

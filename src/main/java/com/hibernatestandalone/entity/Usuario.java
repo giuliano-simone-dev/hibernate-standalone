@@ -7,6 +7,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 public class Usuario {
@@ -19,8 +21,8 @@ public class Usuario {
 	private String mail;
 	private String password;
 	private Date f_registro;
-	
-	
+        @OneToMany(mappedBy = "usuario")
+        private List<Nota> notas;
 	
 	public Long getId() {
 		return id;
@@ -59,6 +61,14 @@ public class Usuario {
 		this.f_registro = f_registro;
 	}
 
+        public List<Nota> getNotas() {
+            return notas;
+        }
+
+        public void setNotas(List<Nota> notas) {
+            this.notas = notas;
+        }
+        
 	@Override
 	public String toString() {
 		return "Nombre: "+this.getNombre()+". Apellido: "+ this.getApellido();
